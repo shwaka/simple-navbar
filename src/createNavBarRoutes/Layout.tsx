@@ -1,6 +1,6 @@
 import type { ReactElement } from "react"
 
-import { Box } from "@mui/material"
+import { Box, type SxProps } from "@mui/material"
 import { Outlet } from "react-router"
 
 import { NavBar } from "../NavBar"
@@ -13,9 +13,10 @@ export interface LayoutProps {
   numberOfExplicitItems?: number
   gitHubUrl?: string
   footerDisplay: "block" | "none"
+  contentBoxSx?: SxProps
 }
 
-export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay }: LayoutProps): ReactElement {
+export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay, contentBoxSx }: LayoutProps): ReactElement {
   const items = subpageRoutes.map((page) => ({
     path: page.path,
     text: page.name,
@@ -27,7 +28,7 @@ export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHub
         numberOfExplicitItems={numberOfExplicitItems}
       />
       <Box
-        sx={{ marginTop: "10px", width: "100%", overflowX: "auto" }}
+        sx={{ marginTop: "10px", width: "100%", overflowX: "auto", ...contentBoxSx }}
       >
         <Outlet />
         <Footer subpageRoutes={subpageRoutes} display={footerDisplay} />

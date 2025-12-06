@@ -21,6 +21,7 @@ const renderRouterProvider = createRenderer({
   siteTitle: "SimpleNavbar",
   gitHubUrl: "https://github.com/shwaka/simple-navbar",
   footerDisplay: "none",
+  contentBoxSx: { marginLeft: "10px" },
 })
 
 function App() {
