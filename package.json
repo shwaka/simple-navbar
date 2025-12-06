@@ -16,10 +16,9 @@
   },
   "scripts": {
     "build": "tsup",
-    "typecheck": "tsc -p tsconfig.build.json",
     "prepare": "npm run typecheck && npm run build",
-    "tsc": "tsc -p tsconfig.build.json -b",
-    "tsc-watch": "tsc -p tsconfig.build.json -b --watch",
+    "tsc": "tsc -p tsconfig.build.json",
+    "tsc-watch": "tsc -p tsconfig.build.json --watch",
     "eslint": "eslint src",
     "eslint:fix": "eslint src --fix",
     "eslint:onsave": "eslint --config eslint-onsave.config.mjs --fix",
