@@ -8,15 +8,15 @@ import { Footer } from "./Footer"
 import type { PageRoute } from "./PageRoute"
 
 export interface LayoutProps {
-  pageRoutes: PageRoute[]
+  subpageRoutes: PageRoute[]
   siteTitle: string
   numberOfExplicitItems?: number
   gitHubUrl: string
   footerDisplay: "block" | "none"
 }
 
-export function Layout({ pageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay }: LayoutProps): ReactElement {
-  const items = pageRoutes.filter(({ path }) => path !== "/").map((page) => ({
+export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay }: LayoutProps): ReactElement {
+  const items = subpageRoutes.map((page) => ({
     path: page.path,
     text: page.name,
   }))
@@ -30,7 +30,7 @@ export function Layout({ pageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl
         sx={{ marginTop: "10px", width: "100%", overflowX: "auto" }}
       >
         <Outlet />
-        <Footer pageRoutes={pageRoutes} display={footerDisplay} />
+        <Footer subpageRoutes={subpageRoutes} display={footerDisplay} />
       </Box>
     </div>
   )
