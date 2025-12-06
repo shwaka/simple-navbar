@@ -30,7 +30,12 @@ export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHub
         numberOfExplicitItems={numberOfExplicitItems}
       />
       <Box
-        sx={{ marginTop: "10px", width: "100%", overflowX: "auto", ...contentBoxSx }}
+        sx={{
+          boxSizing: "border-box",
+          marginTop: "10px",
+          width: "100%", overflowX: "auto",
+          ...contentBoxSx,
+        }}
       >
         <Outlet />
         <Footer subpageRoutes={subpageRoutes} display={footerDisplay} />
