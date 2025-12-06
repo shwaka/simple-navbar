@@ -1,6 +1,8 @@
 import { createNavBarRoutes } from "@shwaka/simple-navbar"
 import { createHashRouter, RouterProvider } from "react-router"
 
+import "./index.css"
+
 const pageRoutes = [
   {
     path: "/",
