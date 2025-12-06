@@ -11,7 +11,7 @@ export interface LayoutProps {
   subpageRoutes: PageRoute[]
   siteTitle: string
   numberOfExplicitItems?: number
-  gitHubUrl: string
+  gitHubUrl?: string
   footerDisplay: "block" | "none"
 }
 
