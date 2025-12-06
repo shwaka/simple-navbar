@@ -16,7 +16,7 @@
   },
   "scripts": {
     "build": "tsup",
-    "prepare": "npm run typecheck && npm run build",
+    "prepare": "npm run tsc && npm run build",
     "tsc": "tsc -p tsconfig.build.json",
     "tsc-watch": "tsc -p tsconfig.build.json --watch",
     "eslint": "eslint src",
