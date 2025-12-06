@@ -22,7 +22,7 @@
     "tsc-watch": "tsc -p tsconfig.build.json -b --watch",
     "eslint": "eslint src",
     "eslint:fix": "eslint src --fix",
-    "eslint:onsave": "eslint --config eslint-onsave.config.js --fix",
+    "eslint:onsave": "eslint --config eslint-onsave.config.mjs --fix",
     "eslint:watch": "chokidar 'src/**/*' --initial --command 'clear && npm run eslint'",
     "lc": "npm run eslint",
     "lf": "npm run eslint:fix"
