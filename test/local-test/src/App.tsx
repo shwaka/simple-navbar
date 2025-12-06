@@ -3,12 +3,7 @@ import { createHashRouter, RouterProvider } from "react-router"
 
 import "./index.css"
 
-const pageRoutes = [
-  {
-    path: "/",
-    element: <div>The root page</div>,
-    name: "Note: this name is ignored",
-  },
+const subpageRoutes = [
   {
     path: "/foo",
     element: <div>This is foo</div>,
@@ -23,7 +18,8 @@ const pageRoutes = [
 
 const router = createHashRouter(
   createNavBarRoutes({
-    pageRoutes,
+    rootPageElement: <div>The root page</div>,
+    subpageRoutes,
     siteTitle: "SimpleNavbar",
     gitHubUrl: "https://github.com/shwaka/simple-navbar",
     footerDisplay: "none",
