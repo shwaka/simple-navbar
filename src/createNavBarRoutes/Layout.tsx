@@ -6,6 +6,7 @@ import { Outlet } from "react-router"
 import { NavBar } from "../NavBar"
 import { Footer } from "./Footer"
 import type { PageRoute } from "./PageRoute"
+import { validateSubpageRoutes } from "./validateSubpageRoutes"
 
 export interface LayoutProps {
   subpageRoutes: PageRoute[]
@@ -17,6 +18,7 @@ export interface LayoutProps {
 }
 
 export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay, contentBoxSx }: LayoutProps): ReactElement {
+  validateSubpageRoutes(subpageRoutes)
   const items = subpageRoutes.map((page) => ({
     path: page.path,
     text: page.name,
