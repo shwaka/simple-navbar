@@ -1,0 +1,38 @@
+{
+  "name": "@shwaka/simple-navbar",
+  "version": "0.1.0",
+  "description": "Simple Navbar for React",
+  "author": "shwaka",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.build.json",
+    "prepare": "npm run typecheck && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.6.0"
+  },
+  "volta": {
+    "node": "24.11.1",
+    "npm": "11.6.4"
+  }
+}
