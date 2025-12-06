@@ -17,7 +17,15 @@
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc -p tsconfig.build.json",
-    "prepare": "npm run typecheck && npm run build"
+    "prepare": "npm run typecheck && npm run build",
+    "tsc": "tsc -p tsconfig.build.json -b",
+    "tsc-watch": "tsc -p tsconfig.build.json -b --watch",
+    "eslint": "eslint src",
+    "eslint:fix": "eslint src --fix",
+    "eslint:onsave": "eslint --config eslint-onsave.config.js --fix",
+    "eslint:watch": "chokidar 'src/**/*' --initial --command 'clear && npm run eslint'",
+    "lc": "npm run eslint",
+    "lf": "npm run eslint:fix"
   },
   "peerDependencies": {
     "@emotion/react": ">=11",
@@ -29,17 +37,22 @@
     "react-router": ">=7"
   },
   "devDependencies": {
+    "@eslint/js": "^9.30.1",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "chokidar-cli": "^3.0.0",
+    "eslint": "^9.30.1",
+    "eslint-config-shwaka": "git+https://github.com/shwaka/eslint-config-shwaka#v3.9",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-router": "^7.9.6",
     "tsup": "^8.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.35.1"
   },
   "volta": {
     "node": "24.11.1",
