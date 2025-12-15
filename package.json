@@ -1,12 +1,15 @@
 {
   "name": "@shwaka/simple-navbar",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Simple Navbar for React",
   "author": "shwaka",
   "license": "MIT",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
