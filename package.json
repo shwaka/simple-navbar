@@ -7,6 +7,9 @@
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "files": [
     "dist"
   ],
@@ -19,7 +22,8 @@
   },
   "scripts": {
     "build": "tsup",
-    "prepare": "npm run tsc && npm run build",
+    "_prepare": "npm run tsc && npm run build",
+    "prepublishOnly": "npm run tsc && npm run build",
     "tsc": "tsc -p tsconfig.build.json",
     "tsc-watch": "tsc -p tsconfig.build.json --watch",
     "eslint": "eslint src",
