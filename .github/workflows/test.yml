@@ -24,6 +24,8 @@ jobs:
     - name: Install dependencies in ${{ matrix.directory }}
       run: npm ci
       working-directory: ${{ matrix.directory }}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for github-test
     - name: Build ${{ matrix.directory }}
       run: npm run build
       working-directory: ${{ matrix.directory }}
