@@ -15,8 +15,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: volta-cli/action@v3
-    - name: Install dependencies in the root project (only for local-test)
-      run: npm ci
+    - name: Setup the root project (only for local-test)
+      run: |
+        npm ci
+        npm run build
       working-directory: .
       if: ${{ matrix.directory == 'test/local-test' }}
     - name: Install dependencies in ${{ matrix.directory }}
