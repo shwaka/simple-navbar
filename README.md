@@ -13,3 +13,10 @@
    ```bash
    npm i @shwaka/simple-navbar
     ```
+
+## Dev
+Run `npm run dev` in the root and `test/local-test/`.
+
+## Memo
+- `tsup@8.5.1` contains a bug around `--watch` (does not emit `.js`).
+  So `8.3.0` is selected.
