@@ -45,7 +45,7 @@ export function NavBarItemsMobile({ title, items, gitHubUrl }: NavBarItemsMobile
         onClose={() => setOpen(false)}
       >
         <DrawerHeader>
-          <Title title={title} />
+          <Title title={title} onClick={() => setOpen(false)} />
 
           <Box sx={{ flexGrow: 1 }} />{/* Put the rest on the right */}
 

@@ -5,9 +5,10 @@ import { Link as RouterLink } from "react-router"
 
 interface TitleDesktopProps {
   title: string
+  onClick?: () => void
 }
 
-export function Title({ title }: TitleDesktopProps): ReactElement {
+export function Title({ title, onClick }: TitleDesktopProps): ReactElement {
   return (
     <Button
       variant="text" size="large"
@@ -19,6 +20,7 @@ export function Title({ title }: TitleDesktopProps): ReactElement {
       }}
       color="inherit" component={RouterLink}
       to="/"
+      onClick={onClick}
     >
       {title}
     </Button>
