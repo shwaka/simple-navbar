@@ -43,7 +43,7 @@ export function createNavBarTheme(theme: Theme): Theme {
         main: theme.palette.primary.main,
       },
       otherPath: {
-        main: "#000",
+        main: theme.palette.text.primary,
       }
     }
   })
