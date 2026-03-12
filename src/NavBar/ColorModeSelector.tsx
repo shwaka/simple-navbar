@@ -1,7 +1,8 @@
-import { type MouseEvent, useState, type ReactElement, Fragment } from "react"
+import { type MouseEvent, useState, type ReactElement, Fragment, useCallback } from "react"
 
 import LightMode from "@mui/icons-material/LightMode"
 import { IconButton, Menu, MenuItem } from "@mui/material"
+import { useColorScheme } from "@mui/material/styles"
 
 export function ColorModeSelector(): ReactElement {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -9,9 +10,14 @@ export function ColorModeSelector(): ReactElement {
   const handleClick = (event: MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget)
   }
-  const handleClose = (): void => {
+  const handleClose = useCallback((): void => {
     setAnchorEl(null)
-  }
+  }, [setAnchorEl])
+  const { mode, setMode } = useColorScheme()
+  const setColorMode = useCallback((m: "light" | "dark" | "system" | null): void => {
+    setMode(m)
+    handleClose()
+  }, [setMode, handleClose])
   return (
     <Fragment>
       <IconButton onClick={handleClick}>
@@ -28,9 +34,9 @@ export function ColorModeSelector(): ReactElement {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>System</MenuItem>
-        <MenuItem onClick={handleClose}>Light</MenuItem>
-        <MenuItem onClick={handleClose}>Dark</MenuItem>
+        <MenuItem onClick={() => setColorMode("system")}>System</MenuItem>
+        <MenuItem onClick={() => setColorMode("light")}>Light</MenuItem>
+        <MenuItem onClick={() => setColorMode("dark")}>Dark</MenuItem>
       </Menu>
     </Fragment>
   )
