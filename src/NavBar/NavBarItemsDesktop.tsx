@@ -90,6 +90,9 @@ export function NavBarItemsDesktop({ items, gitHubUrl, numberOfExplicitItems }: 
     <Box sx={{ flexGrow: 1, display: displayDesktop }}>
       <ExplicitItems items={explicitItems} />
       <ImplicitItems items={implicitItems} />
+
+      <Box sx={{ flexGrow: 1 }} />{/* Put the rest on the right */}
+
       <GitHubLink gitHubUrl={gitHubUrl} />
       <ColorModeSelector />
     </Box>
