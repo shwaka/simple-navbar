@@ -23,18 +23,18 @@ declare module "@mui/material/Button" {
   }
 }
 
-export const theme = createTheme({
-  palette: {
-    currentPath: {
-      // main: "#90caf9",
-      main: "#00f",
-    },
-    otherPath: {
-      // main: "#fff",
-      main: "#000",
-    },
-  },
-})
+// export const theme = createTheme({
+//   palette: {
+//     currentPath: {
+//       // main: "#90caf9",
+//       main: "#00f",
+//     },
+//     otherPath: {
+//       // main: "#fff",
+//       main: "#000",
+//     },
+//   },
+// })
 
 export function createNavBarTheme(theme: Theme): Theme {
   return createTheme(theme, {
