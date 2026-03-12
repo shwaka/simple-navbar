@@ -12,7 +12,7 @@ interface NavLinkButtonProps {
 
 export function NavLinkButton({ to, children, isMobile, onClick }: NavLinkButtonProps): ReactElement {
   const { pathname } = useLocation()
-  const color = (pathname === to) ? "currentPath" : "otherPath"
+  const color = (pathname === to) ? "primary.main" : "text.primary"
   const size = isMobile ? "small" : "large"
   const additionalSx = isMobile
     ? {
@@ -24,8 +24,13 @@ export function NavLinkButton({ to, children, isMobile, onClick }: NavLinkButton
   return (
     <Button
       variant="text" size={size}
-      sx={{ fontSize: "h6.fontSize", textTransform: "none", ...additionalSx }}
-      color={color} component={Link}
+      sx={{
+        color, // cannot put "text.primary" to Button.color directly
+        fontSize: "h6.fontSize",
+        textTransform: "none",
+        ...additionalSx,
+      }}
+      component={Link}
       fullWidth={fullWidth}
       to={to}
       onClick={onClick}
