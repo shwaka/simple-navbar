@@ -1,8 +1,6 @@
 import { type MouseEvent, useState, type ReactElement, Fragment, useCallback } from "react"
 
-import DarkMode from "@mui/icons-material/DarkMode"
-import LightMode from "@mui/icons-material/LightMode"
-import SettingsBrightness from "@mui/icons-material/SettingsBrightness"
+import { DarkMode, LightMode, Brightness4, SettingsBrightness } from "@mui/icons-material"
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material"
 import { useColorScheme } from "@mui/material/styles"
 
@@ -39,7 +37,7 @@ export function ColorModeSelector(): ReactElement {
   return (
     <Fragment>
       <IconButton onClick={handleClick}>
-        <LightMode />
+        <Brightness4 />
       </IconButton>
       <Menu
         id="basic-menu"
