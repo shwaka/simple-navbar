@@ -3,6 +3,7 @@ import { useState, type ReactElement } from "react"
 import MenuIcon from "@mui/icons-material/Menu"
 import { Box, Drawer, IconButton, List, ListItem } from "@mui/material"
 
+import { ColorModeSelector } from "./ColorModeSelector"
 import { displayMobile } from "./display"
 import { GitHubLink } from "./GitHubLink"
 import type { NavBarItem } from "./NavBarItem"
@@ -45,7 +46,12 @@ export function NavBarItemsMobile({ items, gitHubUrl }: NavBarItemsMobileProps):
                 </NavLinkButton>
               </ListItem>
             ))}
-            <GitHubLink gitHubUrl={gitHubUrl} />
+            <ListItem>
+              <GitHubLink gitHubUrl={gitHubUrl} />
+            </ListItem>
+            <ListItem>
+              <ColorModeSelector />
+            </ListItem>
           </List>
         </Box>
       </Drawer>

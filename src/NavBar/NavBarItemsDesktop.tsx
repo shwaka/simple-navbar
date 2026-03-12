@@ -3,6 +3,7 @@ import { Fragment, useState, type ReactElement } from "react"
 
 import { Box, Button, ListItem, Menu } from "@mui/material"
 
+import { ColorModeSelector } from "./ColorModeSelector"
 import { displayDesktop } from "./display"
 import { GitHubLink } from "./GitHubLink"
 import type { NavBarItem } from "./NavBarItem"
@@ -90,6 +91,7 @@ export function NavBarItemsDesktop({ items, gitHubUrl, numberOfExplicitItems }: 
       <ExplicitItems items={explicitItems} />
       <ImplicitItems items={implicitItems} />
       <GitHubLink gitHubUrl={gitHubUrl} />
+      <ColorModeSelector />
     </Box>
   )
 }
