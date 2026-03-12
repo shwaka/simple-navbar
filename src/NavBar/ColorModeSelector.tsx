@@ -34,9 +34,15 @@ export function ColorModeSelector(): ReactElement {
           },
         }}
       >
-        <MenuItem onClick={() => setColorMode("system")}>System</MenuItem>
-        <MenuItem onClick={() => setColorMode("light")}>Light</MenuItem>
-        <MenuItem onClick={() => setColorMode("dark")}>Dark</MenuItem>
+        {(["system", "light", "dark"] as const).map((m) => (
+          <MenuItem
+            selected={m === mode}
+            onClick={() => setColorMode(m)}
+            key={m}
+          >
+            {m}
+          </MenuItem>
+        ))}
       </Menu>
     </Fragment>
   )
