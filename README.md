@@ -19,9 +19,10 @@ Run `npm run dev` in the root and `test/local-test/`.
 
 ## Publish
 1. Update `"version"` in `package.json`
-2. Update version of `"@shwaka/simple-navbar"` in `test/github-test/package.json`
-3. Commit it and run `git tag v9.99.99` (Note: tag MUST start with `v`)
-4. `git push --tags`
+2. Commit it and run `git tag v9.99.99` (Note: tag MUST start with `v`)
+3. `git push` and `git push --tags`
+4. Update version of `"@shwaka/simple-navbar"` in `test/github-test/package.json`. Commit and push it.
+    - Note: Before this, you MUST push the above and wait for publication in GitHub Actions.
 
 ## Memo
 - `tsup@8.5.1` contains a bug around `--watch` (does not emit `.js`).
