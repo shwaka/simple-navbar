@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode } from "react"
 
+import { useTheme } from "@emotion/react"
 import { Box, CssBaseline, type SxProps, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
 import { ThemeProvider, createTheme, useColorScheme } from "@mui/material/styles"
 import { Outlet } from "react-router"
@@ -57,18 +58,18 @@ function SelectColorMode(): ReactNode {
   )
 }
 
-const theme = createTheme({
-  colorSchemes: {
-    dark: true,
-  },
-})
-
 export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay, contentBoxSx }: LayoutProps): ReactElement {
   validateSubpageRoutes(subpageRoutes)
   const items = subpageRoutes.map((page) => ({
     path: page.path,
     text: page.name,
   }))
+  const parentTheme = useTheme()
+  const theme = createTheme(parentTheme, {
+    colorSchemes: {
+      dark: true,
+    }
+  })
   return (
     <div>
       <ThemeProvider theme={theme}>
