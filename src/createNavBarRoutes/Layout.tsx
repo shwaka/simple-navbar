@@ -3,6 +3,7 @@ import type { ReactElement, ReactNode } from "react"
 import { useTheme } from "@emotion/react"
 import { Box, CssBaseline, type SxProps, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
 import { ThemeProvider, createTheme, useColorScheme } from "@mui/material/styles"
+import { deepmerge } from "@mui/utils"
 import { Outlet } from "react-router"
 
 import { NavBar } from "../NavBar"
@@ -65,11 +66,16 @@ export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHub
     text: page.name,
   }))
   const parentTheme = useTheme()
-  const theme = createTheme(parentTheme, {
-    colorSchemes: {
-      dark: true,
+  // https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
+  // createTheme に複数のargsを与えるのはdeprecaded.
+  // 自分で deepmerge することが推奨されている．
+  const theme = createTheme(
+    deepmerge(parentTheme, {
+      colorSchemes: {
+        dark: true,
+      }
     }
-  })
+    ))
   return (
     <div>
       <ThemeProvider theme={theme}>
