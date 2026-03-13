@@ -1,20 +1,33 @@
 import { useState, type ReactElement } from "react"
 
 import MenuIcon from "@mui/icons-material/Menu"
-import { Box, Drawer, IconButton, List, ListItem } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, List, ListItem } from "@mui/material"
+import { styled } from "@mui/material/styles"
 
 import { ColorModeSelector } from "./ColorModeSelector"
 import { displayMobile } from "./display"
 import { GitHubLink } from "./GitHubLink"
 import type { NavBarItem } from "./NavBarItem"
 import { NavLinkButton } from "./NavLinkButton"
+import { Title } from "./Title"
+
+// Copied from https://mui.com/material-ui/react-drawer/
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  // justifyContent: "flex-end",
+}))
 
 interface NavBarItemsMobileProps {
+  title: string
   items: NavBarItem[]
   gitHubUrl?: string
 }
 
-export function NavBarItemsMobile({ items, gitHubUrl }: NavBarItemsMobileProps): ReactElement {
+export function NavBarItemsMobile({ title, items, gitHubUrl }: NavBarItemsMobileProps): ReactElement {
   const [open, setOpen] = useState(false)
   return (
     <Box
@@ -31,6 +44,15 @@ export function NavBarItemsMobile({ items, gitHubUrl }: NavBarItemsMobileProps):
         open={open}
         onClose={() => setOpen(false)}
       >
+        <DrawerHeader>
+          <Title title={title} onClick={() => setOpen(false)} />
+
+          <Box sx={{ flexGrow: 1 }} />{/* Put the rest on the right */}
+
+          <GitHubLink gitHubUrl={gitHubUrl} />
+          <ColorModeSelector />
+        </DrawerHeader>
+        <Divider />
         <Box
           sx={{ width: "80vw" }}
         >
@@ -46,12 +68,6 @@ export function NavBarItemsMobile({ items, gitHubUrl }: NavBarItemsMobileProps):
                 </NavLinkButton>
               </ListItem>
             ))}
-            <ListItem>
-              <GitHubLink gitHubUrl={gitHubUrl} />
-            </ListItem>
-            <ListItem>
-              <ColorModeSelector />
-            </ListItem>
           </List>
         </Box>
       </Drawer>

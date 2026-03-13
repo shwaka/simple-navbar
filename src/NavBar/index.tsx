@@ -19,7 +19,7 @@ export function NavBar({ title, items, gitHubUrl, numberOfExplicitItems }: NavBa
     <AppBar position="sticky" color="inherit">
       <Toolbar disableGutters>
         <NavBarItemsMobile
-          items={items} gitHubUrl={gitHubUrl}
+          title={title} items={items} gitHubUrl={gitHubUrl}
         />
         <Title title={title} />
         <NavBarItemsDesktop
