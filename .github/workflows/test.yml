@@ -21,6 +21,8 @@ jobs:
         npm run build
       working-directory: .
       if: ${{ matrix.directory == 'test/local-test' }}
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # for eslint-config-shwaka
     - name: Install dependencies in ${{ matrix.directory }}
       run: npm ci
       working-directory: ${{ matrix.directory }}
