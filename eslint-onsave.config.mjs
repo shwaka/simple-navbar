@@ -1,5 +1,5 @@
 // @ts-check
-import { eslintConfigShwakaOnsave } from "eslint-config-shwaka"
+import { eslintConfigShwakaOnsave } from "@shwaka/eslint-config-shwaka"
 import tseslint from "typescript-eslint"
 
 export default tseslint.config(
