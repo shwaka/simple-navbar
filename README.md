@@ -27,3 +27,33 @@ Run `npm run dev` in the root and `test/local-test/`.
 ## Memo
 - `tsup@8.5.1` contains a bug around `--watch` (does not emit `.js`).
   So `8.3.0` is selected.
+
+## Custom theme
+```typescript
+const myTheme = createTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: "#990000",
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: "#00ee00",
+        },
+      },
+    },
+  },
+})
+
+function App() {
+  return (
+    <ThemeProvider theme={myTheme}>
+      {renderRouterProvider()}
+    </ThemeProvider>
+  )
+}
+```

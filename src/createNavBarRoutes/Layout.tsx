@@ -31,13 +31,16 @@ export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHub
   // https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
   // createTheme に複数のargsを与えるのはdeprecaded.
   // 自分で deepmerge することが推奨されている．
-  const theme = createTheme(
-    deepmerge(parentTheme, {
+  // 外側でカスタムthemeを導入している場合に，そのdarkの値を尊重したいので，
+  // parentThemeを後に置く必要がある．
+  const theme = createTheme(deepmerge(
+    {
       colorSchemes: {
         dark: true,
       }
-    }
-    ))
+    },
+    parentTheme,
+  ))
   return (
     <div>
       <ThemeProvider theme={theme}>
