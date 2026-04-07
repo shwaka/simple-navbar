@@ -1,4 +1,4 @@
-import { createRenderer, createSimpleTheme } from "@shwaka/simple-navbar"
+import { createRenderer, createSimpleTheme, RouteCardList } from "@shwaka/simple-navbar"
 
 import "./index.css"
 import { ThemeProvider } from "@emotion/react"
@@ -8,6 +8,7 @@ const subpageRoutes = [
     path: "/foo",
     element: <div>This is foo</div>,
     name: "Foo",
+    description: "ここにFooの説明を書く．"
   },
   {
     path: "/bar",
@@ -23,7 +24,7 @@ const subpageRoutes = [
 ]
 
 const renderRouterProvider = createRenderer({
-  rootPageElement: <div>The root page</div>,
+  rootPageElement: <RouteCardList subpageRoutes={subpageRoutes} />,
   subpageRoutes,
   siteTitle: "SimpleNavbar",
   gitHubUrl: "https://github.com/shwaka/simple-navbar",
