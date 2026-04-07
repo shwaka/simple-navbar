@@ -4,4 +4,5 @@ export interface PageRoute {
   path: string
   element: ReactElement
   name: string
+  hidden?: boolean // default: false
 }

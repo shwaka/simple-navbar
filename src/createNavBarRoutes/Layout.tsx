@@ -23,7 +23,8 @@ export interface LayoutProps {
 
 export function Layout({ subpageRoutes, siteTitle, numberOfExplicitItems, gitHubUrl, footerDisplay, contentBoxSx }: LayoutProps): ReactElement {
   validateSubpageRoutes(subpageRoutes)
-  const items = subpageRoutes.map((page) => ({
+  // page.hiddenがfalseかundefinedのときに，!page.hiddenはtrueになる
+  const items = subpageRoutes.filter((page) => !page.hidden).map((page) => ({
     path: page.path,
     text: page.name,
   }))

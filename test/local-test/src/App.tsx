@@ -14,6 +14,12 @@ const subpageRoutes = [
     element: <div>This is bar</div>,
     name: "Bar",
   },
+  {
+    path: "/baz",
+    element: <div>This is baz</div>,
+    name: "Baz",
+    hidden: true,
+  },
 ]
 
 const renderRouterProvider = createRenderer({
