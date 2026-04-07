@@ -1,6 +1,7 @@
-import { createRenderer } from "@shwaka/simple-navbar"
+import { createRenderer, createSimpleTheme } from "@shwaka/simple-navbar"
 
 import "./index.css"
+import { ThemeProvider } from "@emotion/react"
 
 const subpageRoutes = [
   {
@@ -24,9 +25,15 @@ const renderRouterProvider = createRenderer({
   contentBoxSx: { paddingLeft: "10px" },
 })
 
+const theme = createSimpleTheme({
+  mainHue: 250,
+})
+
 function App() {
   return (
-    renderRouterProvider()
+    <ThemeProvider theme={theme}>
+      {renderRouterProvider()}
+    </ThemeProvider>
   )
 }
 
