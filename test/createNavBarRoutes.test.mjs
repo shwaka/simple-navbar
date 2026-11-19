@@ -57,9 +57,11 @@ test("wraps every page in a separate Suspense boundary", () => {
   assert.equal(rootBoundary.type, React.Suspense)
   assert.equal(rootBoundary.props.fallback, fallback)
   assert.equal(rootBoundary.props.children, rootPageElement)
+  assert.equal(rootBoundary.key, "/")
   assert.equal(subpageBoundary.type, React.Suspense)
   assert.equal(subpageBoundary.props.fallback, fallback)
   assert.equal(subpageBoundary.props.children, subpageElement)
+  assert.equal(subpageBoundary.key, "/subpage")
   assert.notEqual(rootBoundary, subpageBoundary)
 })
 

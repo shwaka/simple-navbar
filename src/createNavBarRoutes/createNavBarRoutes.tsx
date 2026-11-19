@@ -18,12 +18,12 @@ export function createNavBarRoutes({
   const routeObjects: RouteObject[] = [
     {
       path: "/",
-      element: wrapPageWithSuspense(rootPageElement, pageSuspense),
+      element: wrapPageWithSuspense(rootPageElement, pageSuspense, "/"),
     },
     ...layoutProps.subpageRoutes.map(
       ({ path, element }) => ({
         path,
-        element: wrapPageWithSuspense(element, pageSuspense),
+        element: wrapPageWithSuspense(element, pageSuspense, path),
       })
     )
   ]

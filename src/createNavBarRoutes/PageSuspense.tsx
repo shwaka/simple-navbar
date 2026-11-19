@@ -30,6 +30,7 @@ function DefaultPageFallback(): ReactElement {
 export function wrapPageWithSuspense(
   element: ReactElement,
   pageSuspense: PageSuspenseOptions | undefined,
+  routeKey: string,
 ): ReactElement {
   if (pageSuspense?.enabled !== true) {
     return element
@@ -37,5 +38,9 @@ export function wrapPageWithSuspense(
   const fallback = pageSuspense.fallback === "default"
     ? <DefaultPageFallback />
     : pageSuspense.fallback
-  return <Suspense fallback={fallback}>{element}</Suspense>
+  return (
+    <Suspense key={routeKey} fallback={fallback}>
+      {element}
+    </Suspense>
+  )
 }

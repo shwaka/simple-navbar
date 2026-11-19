@@ -95,11 +95,11 @@ function createNavBarRoutes({
   const routeObjects: RouteObject[] = [
     {
       path: "/",
-      element: wrapPageWithSuspense(rootPageElement, pageSuspense),
+      element: wrapPageWithSuspense(rootPageElement, pageSuspense, "/"),
     },
     ...layoutProps.subpageRoutes.map(({ path, element }) => ({
       path,
-      element: wrapPageWithSuspense(element, pageSuspense),
+      element: wrapPageWithSuspense(element, pageSuspense, path),
     })),
   ]
 
@@ -126,8 +126,12 @@ Avoid implementing the feature solely as:
 ```
 
 That creates one persistent boundary shared by every route. During a transition, React may retain
-the previous page instead of displaying the fallback for the new page. Giving each route its own
-boundary preserves the behavior of an application-level helper such as:
+the previous page instead of displaying the fallback for the new page. Each route boundary must
+also use its route path as a React key. Without the key, React can reconcile boundaries of the same
+type at the Outlet position and reuse the boundary revealed by the previous page.
+
+Giving each route its own keyed boundary preserves the behavior of an application-level helper
+such as:
 
 ```tsx
 function lazyPage(element: ReactElement): ReactElement {
