@@ -1,5 +1,6 @@
 export { NavBar } from "./NavBar"
 export { createNavBarRoutes } from "./createNavBarRoutes"
+export type { PageSuspenseOptions } from "./createNavBarRoutes"
 export { createRenderer } from "./createRenderer"
 export { createSimpleTheme } from "./createSimpleTheme"
 export { RouteCardList } from "./RouteCardList"

@@ -2,7 +2,7 @@
 
 ## Goal
 
-Add an optional page loading fallback to `@shwaka/simple-navbar` so applications can use
+Add optional page-level Suspense support to `@shwaka/simple-navbar` so applications can use
 `React.lazy()` for route-level code splitting without wrapping every route element in their own
 `Suspense` boundary.
 
@@ -10,38 +10,33 @@ The responsibilities should remain separated as follows:
 
 - The application decides which page modules are loaded with dynamic `import()`.
 - `simple-navbar` places a `Suspense` boundary around each route element.
-- The application supplies the loading UI through the `createRenderer` / `createNavBarRoutes`
-  options.
+- The application selects the built-in loading UI or supplies its own through the
+  `createRenderer` / `createNavBarRoutes` options.
 
 This feature must be opt-in and must not change the behavior of existing users.
 
 ## Proposed API
 
-Add an optional `pageFallback` property to `LayoutProps`.
+Add an optional `pageSuspense` property to the arguments shared by `createNavBarRoutes()` and
+`createRenderer()`.
 
 ```tsx
-import type { ReactNode } from "react"
+import type { ReactElement } from "react"
 
-interface LayoutProps {
-  subpageRoutes: PageRoute[]
-  siteTitle: string
-  numberOfExplicitItems?: number
-  gitHubUrl?: string
-  footerDisplay: "block" | "none"
-  contentBoxSx?: SxProps
-  colorMode?: "light" | "dark"
-  pageFallback?: ReactNode
-}
+type PageSuspenseOptions =
+  | { enabled: false }
+  | { enabled: true; fallback: "default" | ReactElement }
 ```
 
-`pageFallback` is optional:
+`pageSuspense` is optional:
 
-- When omitted, route elements are passed through unchanged.
-- When provided, every root/subpage route element is wrapped in an individual `Suspense`
-  boundary using that fallback.
+- When omitted or disabled, route elements are passed through unchanged.
+- When enabled, every root/subpage route element is wrapped in an individual `Suspense` boundary.
+- `fallback: "default"` selects the library's loading indicator; a `ReactElement` supplies a
+  custom one.
 
-The property is part of the existing argument type used by both `createNavBarRoutes()` and
-`createRenderer()`, so no separate API is necessary.
+The discriminated union makes enabling the feature explicit and does not assign special behavior
+to `null` or `undefined` fallback values.
 
 ## Why simple-navbar should not own dynamic imports
 
@@ -65,15 +60,18 @@ style.
 Add a small helper near `createNavBarRoutes`:
 
 ```tsx
-import { Suspense, type ReactElement, type ReactNode } from "react"
+import { Suspense, type ReactElement } from "react"
 
 function wrapPageWithSuspense(
   element: ReactElement,
-  fallback: ReactNode | undefined,
+  pageSuspense: PageSuspenseOptions | undefined,
 ): ReactElement {
-  if (fallback === undefined) {
+  if (pageSuspense?.enabled !== true) {
     return element
   }
+  const fallback = pageSuspense.fallback === "default"
+    ? <DefaultPageFallback />
+    : pageSuspense.fallback
   return (
     <Suspense fallback={fallback}>
       {element}
@@ -82,8 +80,7 @@ function wrapPageWithSuspense(
 }
 ```
 
-Checking specifically for `undefined` is intentional. It allows callers to pass `null` explicitly
-when they want a Suspense boundary with no visible loading indicator.
+`DefaultPageFallback` displays an accessible, centered MUI progress indicator in the page area.
 
 ### 2. Wrap each route separately
 
@@ -92,17 +89,17 @@ Update `createNavBarRoutes()` so that each route receives its own boundary:
 ```tsx
 function createNavBarRoutes({
   rootPageElement,
+  pageSuspense,
   ...layoutProps
 }: CreateNavBarRoutesArgs): RouteObject[] {
-  const { pageFallback } = layoutProps
   const routeObjects: RouteObject[] = [
     {
       path: "/",
-      element: wrapPageWithSuspense(rootPageElement, pageFallback),
+      element: wrapPageWithSuspense(rootPageElement, pageSuspense),
     },
     ...layoutProps.subpageRoutes.map(({ path, element }) => ({
       path,
-      element: wrapPageWithSuspense(element, pageFallback),
+      element: wrapPageWithSuspense(element, pageSuspense),
     })),
   ]
 
@@ -116,28 +113,14 @@ function createNavBarRoutes({
 }
 ```
 
-If `Layout` does not need `pageFallback`, it is preferable to omit it before spreading the props
-into `Layout`:
-
-```tsx
-function createNavBarRoutes({
-  rootPageElement,
-  pageFallback,
-  ...layoutProps
-}: CreateNavBarRoutesArgs): RouteObject[] {
-  // Use pageFallback for route wrapping and pass only layout-related props to Layout.
-}
-```
-
-Alternatively, keeping it in `LayoutProps` is acceptable if the project currently uses that type
-as the public options type. In that case `Layout` may simply ignore the property.
+`pageSuspense` is consumed while routes are created and is not passed to `Layout`.
 
 ### 3. Do not wrap only the shared Outlet
 
 Avoid implementing the feature solely as:
 
 ```tsx
-<Suspense fallback={pageFallback}>
+<Suspense fallback={fallback}>
   <Outlet />
 </Suspense>
 ```
@@ -199,7 +182,10 @@ const subpageRoutes = [
 const renderRouterProvider = createRenderer({
   rootPageElement: <div>The root page</div>,
   subpageRoutes,
-  pageFallback: <PageLoading />,
+  pageSuspense: {
+    enabled: true,
+    fallback: <PageLoading />,
+  },
   siteTitle: "Bibview",
   gitHubUrl: "https://github.com/shwaka/biblio",
   footerDisplay: "none",
@@ -213,28 +199,27 @@ loader runs only when React Router renders that route.
 
 This should be a backward-compatible minor feature:
 
-- `pageFallback` is optional.
+- `pageSuspense` is optional.
 - Existing `PageRoute` objects are unchanged.
 - Existing eager route elements continue to work.
-- When `pageFallback` is omitted, no additional `Suspense` boundary is added.
+- When `pageSuspense` is omitted or disabled, no additional `Suspense` boundary is added.
 - Applications that already wrap route elements in `Suspense` may continue doing so, although they
-  should remove the redundant application-level wrapper after adopting `pageFallback`.
+  should remove the redundant application-level wrapper after adopting `pageSuspense`.
 
-No default spinner or MUI component should be imposed by the library. Loading presentation belongs
-to the application and adding a built-in component would unnecessarily increase the entry bundle
-and constrain styling.
+The default loading indicator is deliberately minimal. Applications retain control of presentation
+by supplying their own fallback element.
 
 ## Tests
 
 Add tests for `createNavBarRoutes()` or `createRenderer()` covering the following cases.
 
-### Existing behavior without pageFallback
+### Existing behavior without pageSuspense
 
-- Route elements are returned unchanged when `pageFallback` is omitted.
+- Route elements are returned unchanged when `pageSuspense` is omitted or disabled.
 - The root route and subpage paths remain unchanged.
 - Existing navigation tests continue to pass.
 
-### Lazy page with pageFallback
+### Lazy page with pageSuspense
 
 Create a deferred lazy component:
 
@@ -254,11 +239,11 @@ Then verify:
 4. Resolve the lazy module inside `act()`.
 5. The page content replaces the fallback.
 
-### Explicit null fallback
+### Default fallback
 
-- Passing `pageFallback: null` still creates a working Suspense boundary.
-- The lazy route does not throw the missing-Suspense-boundary error.
-- No loading indicator is rendered.
+- Passing `pageSuspense: { enabled: true, fallback: "default" }` shows the built-in loading
+  indicator.
+- Passing a React element shows the custom fallback instead.
 
 ### Separate boundaries per route
 
@@ -268,8 +253,9 @@ Then verify:
 
 ## Documentation
 
-Document that `pageFallback` supplies only the Suspense UI. It does not automatically split
-application code. Consumers must use `React.lazy()` and dynamic `import()` for the route component.
+Document that `pageSuspense` supplies only the Suspense boundary and UI. It does not automatically
+split application code. Consumers must use `React.lazy()` and dynamic `import()` for the route
+component.
 
 Also document these operational characteristics:
 
@@ -287,7 +273,7 @@ After publishing and installing the new `simple-navbar` version:
 3. Remove the `Suspense` import from bibview.
 4. Change route elements back from `lazyPage(<Explorer />)` to `<Explorer />`, and likewise for the
    other pages.
-5. Pass `pageFallback: <PageLoading />` to `createRenderer()`.
+5. Pass `pageSuspense: { enabled: true, fallback: <PageLoading /> }` to `createRenderer()`.
 6. Keep `PageLoading` in bibview so the application controls its presentation.
 7. Run lint, tests, and the production build.
 8. Confirm that route-level chunks are still emitted and that the chunk-size warning remains
@@ -322,7 +308,10 @@ const subpageRoutes = [
 const renderRouterProvider = createRenderer({
   rootPageElement: <div>The root page</div>,
   subpageRoutes,
-  pageFallback: <PageLoading />,
+  pageSuspense: {
+    enabled: true,
+    fallback: <PageLoading />,
+  },
   siteTitle: "Bibview",
   gitHubUrl: "https://github.com/shwaka/biblio",
   footerDisplay: "none",
@@ -341,5 +330,5 @@ React Router also supports a native `route.lazy` API that can lazily provide rou
 `simple-navbar` later needs to support data routes.
 
 That is a broader API change and is not required for the current use case. The proposed
-`pageFallback` feature should remain focused on providing a reusable page-level Suspense boundary
+`pageSuspense` feature should remain focused on providing a reusable page-level Suspense boundary
 for applications that already use `React.lazy()`.

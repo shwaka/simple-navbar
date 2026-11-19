@@ -57,3 +57,50 @@ function App() {
   )
 }
 ```
+
+## Lazy-loaded pages
+
+Applications can use `React.lazy()` for route-level code splitting and let
+`simple-navbar` provide a separate `Suspense` boundary for each page. The
+application remains responsible for the dynamic import.
+
+```tsx
+import { lazy } from "react"
+
+import { createRenderer } from "@shwaka/simple-navbar"
+
+const Explorer = lazy(() => import("./Explorer").then(
+  ({ Explorer: Component }) => ({ default: Component }),
+))
+
+const renderRouterProvider = createRenderer({
+  rootPageElement: <div>The root page</div>,
+  subpageRoutes: [
+    {
+      path: "/explorer",
+      element: <Explorer />,
+      name: "Explorer",
+    },
+  ],
+  pageSuspense: {
+    enabled: true,
+    fallback: "default",
+  },
+  siteTitle: "Example",
+  footerDisplay: "none",
+})
+```
+
+Set `fallback` to a React element to replace the default loading indicator:
+
+```tsx
+pageSuspense: {
+  enabled: true,
+  fallback: <PageLoading />,
+}
+```
+
+When `pageSuspense` is omitted or has `enabled: false`, route elements are not
+wrapped in `Suspense`, preserving the existing behavior. `Suspense` handles the
+loading state but not dynamic import failures; use an Error Boundary when the
+application needs error recovery.
