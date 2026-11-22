@@ -4,6 +4,8 @@ import { lazy } from "react"
 import "./index.css"
 import { ThemeProvider } from "@emotion/react"
 
+import SlowRenderDemo from "./SlowRenderDemo"
+
 const DefaultFallbackDemo = lazy(async () => {
   const module = await import("./DefaultFallbackDemo")
   await new Promise((resolve) => setTimeout(resolve, 1500))
@@ -34,6 +36,12 @@ const subpageRoutes = [
     name: "Default fallback",
     description: "1.5秒間の遅延読み込み中に、既定のfallbackを表示します。",
   },
+  {
+    path: "/slow-render",
+    element: <SlowRenderDemo />,
+    name: "Slow render",
+    description: "同期的に重い初期レンダリング中のfallbackを確認します。",
+  },
 ]
 
 const renderRouterProvider = createRenderer({
@@ -46,6 +54,7 @@ const renderRouterProvider = createRenderer({
   pageSuspense: {
     enabled: true,
     fallback: "default",
+    deferInitialRender: true,
   },
 })
 
