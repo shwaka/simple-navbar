@@ -99,8 +99,9 @@ test("defers the initial render of subpages with the shared fallback", () => {
 
   assert.equal(rootBoundary.props.children, rootPageElement)
   assert.equal(subpageBoundary.props.fallback, fallback)
-  assert.equal(gate.props.enabled, true)
   assert.equal(gate.props.fallback, fallback)
+  assert.equal(gate.props.loadingFallback, fallback)
+  assert.equal(gate.props.renderingFallback, fallback)
   assert.equal(gate.props.preload, preload)
   assert.equal(gate.props.children, subpageElement)
   assert.match(renderToString(subpageBoundary), /Loading/)
@@ -119,7 +120,32 @@ test("supports deferred subpages without a preload function", () => {
   const gate = pageRoutes[1].element.props.children
 
   assert.equal(gate.props.preload, undefined)
+  assert.equal(gate.props.fallback, fallback)
   assert.equal(gate.props.children, subpageElement)
+})
+
+test("labels preload and render phases in the built-in fallback", () => {
+  const pageRoutes = getPageRoutes({
+    subpageRoutes: [
+      {
+        path: "/subpage",
+        element: subpageElement,
+        name: "Subpage",
+        preload: async () => undefined,
+      },
+    ],
+    pageSuspense: {
+      enabled: true,
+      fallback: "default",
+      deferInitialRender: true,
+    },
+  })
+  const boundary = pageRoutes[1].element
+  const gate = boundary.props.children
+
+  assert.match(renderToString(gate.props.loadingFallback), /Loading\.\.\./)
+  assert.match(renderToString(gate.props.renderingFallback), /Rendering\.\.\./)
+  assert.match(renderToString(boundary), /Loading\.\.\./)
 })
 
 test("uses the built-in element for the default fallback", () => {

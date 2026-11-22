@@ -113,3 +113,8 @@ its initial render, including repeat visits after its lazy module is cached.
 The option defaults to `false`. An optional route `preload` function can start
 loading the lazy module while the fallback is being painted; use the same
 loader for both `lazy()` and `preload` as shown above.
+
+When the built-in fallback and `preload` are both used, the indicator shows
+`Loading...` until preload completes and `Rendering...` while the page begins
+rendering. Without `preload`, the built-in indicator has no phase text. Custom
+fallback elements are rendered unchanged.

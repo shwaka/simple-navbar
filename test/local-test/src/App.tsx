@@ -4,13 +4,21 @@ import { lazy } from "react"
 import "./index.css"
 import { ThemeProvider } from "@emotion/react"
 
-import SlowRenderDemo from "./SlowRenderDemo"
+const loadDefaultFallbackDemo = (() => {
+  let promise: Promise<typeof import("./DefaultFallbackDemo")> | undefined
+  return () => {
+    promise ??= (async () => {
+      const module = await import("./DefaultFallbackDemo")
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      return module
+    })()
+    return promise
+  }
+})()
+const DefaultFallbackDemo = lazy(loadDefaultFallbackDemo)
 
-const DefaultFallbackDemo = lazy(async () => {
-  const module = await import("./DefaultFallbackDemo")
-  await new Promise((resolve) => setTimeout(resolve, 1500))
-  return module
-})
+const loadSlowRenderDemo = () => import("./SlowRenderDemo")
+const SlowRenderDemo = lazy(loadSlowRenderDemo)
 
 const subpageRoutes = [
   {
@@ -33,12 +41,14 @@ const subpageRoutes = [
   {
     path: "/default-fallback",
     element: <DefaultFallbackDemo />,
+    preload: loadDefaultFallbackDemo,
     name: "Default fallback",
     description: "1.5秒間の遅延読み込み中に、既定のfallbackを表示します。",
   },
   {
     path: "/slow-render",
     element: <SlowRenderDemo />,
+    preload: loadSlowRenderDemo,
     name: "Slow render",
     description: "同期的に重い初期レンダリング中のfallbackを確認します。",
   },
