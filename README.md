@@ -69,9 +69,10 @@ import { lazy } from "react"
 
 import { createRenderer } from "@shwaka/simple-navbar"
 
-const Explorer = lazy(() => import("./Explorer").then(
+const loadExplorer = () => import("./Explorer").then(
   ({ Explorer: Component }) => ({ default: Component }),
-))
+)
+const Explorer = lazy(loadExplorer)
 
 const renderRouterProvider = createRenderer({
   rootPageElement: <div>The root page</div>,
@@ -79,12 +80,14 @@ const renderRouterProvider = createRenderer({
     {
       path: "/explorer",
       element: <Explorer />,
+      preload: loadExplorer,
       name: "Explorer",
     },
   ],
   pageSuspense: {
     enabled: true,
     fallback: "default",
+    deferInitialRender: true,
   },
   siteTitle: "Example",
   footerDisplay: "none",
@@ -104,3 +107,9 @@ When `pageSuspense` is omitted or has `enabled: false`, route elements are not
 wrapped in `Suspense`, preserving the existing behavior. `Suspense` handles the
 loading state but not dynamic import failures; use an Error Boundary when the
 application needs error recovery.
+
+Set `deferInitialRender: true` to show the same fallback while a subpage begins
+its initial render, including repeat visits after its lazy module is cached.
+The option defaults to `false`. An optional route `preload` function can start
+loading the lazy module while the fallback is being painted; use the same
+loader for both `lazy()` and `preload` as shown above.

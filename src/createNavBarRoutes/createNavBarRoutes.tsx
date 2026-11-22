@@ -21,9 +21,16 @@ export function createNavBarRoutes({
       element: wrapPageWithSuspense(rootPageElement, pageSuspense, "/"),
     },
     ...layoutProps.subpageRoutes.map(
-      ({ path, element }) => ({
+      ({ path, element, preload }) => ({
         path,
-        element: wrapPageWithSuspense(element, pageSuspense, path),
+        element: wrapPageWithSuspense(
+          element,
+          pageSuspense,
+          path,
+          pageSuspense?.enabled === true &&
+          pageSuspense.deferInitialRender === true,
+          preload,
+        ),
       })
     )
   ]

@@ -65,6 +65,63 @@ test("wraps every page in a separate Suspense boundary", () => {
   assert.notEqual(rootBoundary, subpageBoundary)
 })
 
+test("preserves the existing structure when deferInitialRender is omitted", () => {
+  const fallback = React.createElement("p", null, "Loading")
+  const pageRoutes = getPageRoutes({
+    pageSuspense: { enabled: true, fallback },
+  })
+
+  assert.equal(pageRoutes[0].element.props.children, rootPageElement)
+  assert.equal(pageRoutes[1].element.props.children, subpageElement)
+})
+
+test("defers the initial render of subpages with the shared fallback", () => {
+  const fallback = React.createElement("p", null, "Loading")
+  const preload = async () => undefined
+  const pageRoutes = getPageRoutes({
+    subpageRoutes: [
+      {
+        path: "/subpage",
+        element: subpageElement,
+        name: "Subpage",
+        preload,
+      },
+    ],
+    pageSuspense: {
+      enabled: true,
+      fallback,
+      deferInitialRender: true,
+    },
+  })
+  const rootBoundary = pageRoutes[0].element
+  const subpageBoundary = pageRoutes[1].element
+  const gate = subpageBoundary.props.children
+
+  assert.equal(rootBoundary.props.children, rootPageElement)
+  assert.equal(subpageBoundary.props.fallback, fallback)
+  assert.equal(gate.props.enabled, true)
+  assert.equal(gate.props.fallback, fallback)
+  assert.equal(gate.props.preload, preload)
+  assert.equal(gate.props.children, subpageElement)
+  assert.match(renderToString(subpageBoundary), /Loading/)
+  assert.doesNotMatch(renderToString(subpageBoundary), /Subpage/)
+})
+
+test("supports deferred subpages without a preload function", () => {
+  const fallback = React.createElement("p", null, "Loading")
+  const pageRoutes = getPageRoutes({
+    pageSuspense: {
+      enabled: true,
+      fallback,
+      deferInitialRender: true,
+    },
+  })
+  const gate = pageRoutes[1].element.props.children
+
+  assert.equal(gate.props.preload, undefined)
+  assert.equal(gate.props.children, subpageElement)
+})
+
 test("uses the built-in element for the default fallback", () => {
   const pageRoutes = getPageRoutes({
     pageSuspense: { enabled: true, fallback: "default" },

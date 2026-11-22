@@ -6,4 +6,5 @@ export interface PageRoute {
   name: string
   hidden?: boolean // default: false
   description?: string
+  preload?: () => Promise<unknown>
 }
