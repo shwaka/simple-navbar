@@ -133,6 +133,25 @@ test("uses the built-in element for the default fallback", () => {
   assert.ok(React.isValidElement(boundary.props.fallback))
 })
 
+test("keeps the built-in spinner width stable under heavy load", async () => {
+  const LazyPage = React.lazy(() => new Promise(() => undefined))
+  const pageRoutes = getPageRoutes({
+    subpageRoutes: [
+      {
+        path: "/lazy",
+        element: React.createElement(LazyPage),
+        name: "Lazy page",
+      },
+    ],
+    pageSuspense: { enabled: true, fallback: "default" },
+  })
+
+  assert.match(
+    renderToString(pageRoutes[1].element),
+    /MuiCircularProgress-circleDisableShrink/,
+  )
+})
+
 test("shows the fallback until a lazy page module resolves", async () => {
   let resolvePage
   const LazyPage = React.lazy(() => new Promise((resolve) => {

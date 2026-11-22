@@ -78,7 +78,9 @@ function DefaultPageFallback(): ReactElement {
         placeItems: "center",
       }}
     >
-      <CircularProgress />
+      {/* Keep the arc length stable when a synchronous page render blocks the
+          main thread. MUI recommends disableShrink for high-CPU-load cases. */}
+      <CircularProgress disableShrink />
     </Box>
   )
 }
