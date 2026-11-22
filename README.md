@@ -29,6 +29,30 @@ Run `npm run dev` in the root and `test/local-test/`.
   So `8.3.0` is selected.
 
 ## Custom theme
+
+Use `createSimpleTheme` to create a theme by specifying only the hue of the
+primary color. `mainHue` is an angle in degrees from `0` to `360`.
+
+```typescript
+import { ThemeProvider } from "@mui/material"
+import { createSimpleTheme } from "@shwaka/simple-navbar"
+
+const myTheme = createSimpleTheme({
+  mainHue: 250,
+})
+
+function App() {
+  return (
+    <ThemeProvider theme={myTheme}>
+      {renderRouterProvider()}
+    </ThemeProvider>
+  )
+}
+```
+
+For more detailed customization, create a MUI theme directly with
+`createTheme`.
+
 ```typescript
 const myTheme = createTheme({
   colorSchemes: {
